@@ -1,0 +1,709 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Ankieta projektowa — Gabriel i Wiktoria</title>
+  <meta name="description" content="Ankieta projektowa dotycząca wnętrza mieszkania." />
+  <style>
+    :root{
+      --bg:#f6f5f2;
+      --card:#ffffff;
+      --text:#1f1f1f;
+      --muted:#6d6a64;
+      --line:#dfddd7;
+      --accent:#2f5d50;
+      --accent-soft:#e8f0ed;
+      --danger:#9c3d3d;
+      --radius:22px;
+      --shadow:0 20px 60px rgba(0,0,0,.07);
+      --max:860px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      line-height:1.55;
+    }
+    .wrap{
+      width:min(calc(100% - 32px), var(--max));
+      margin:48px auto;
+    }
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .top{
+      padding:28px 30px 22px;
+      border-bottom:1px solid var(--line);
+      background:linear-gradient(180deg,#fff 0%,#fbfbf9 100%);
+    }
+    .eyebrow{
+      font-size:.82rem;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      color:var(--muted);
+      margin-bottom:8px;
+      font-weight:700;
+    }
+    h1{
+      margin:0 0 10px;
+      font-size:clamp(1.9rem,4vw,3rem);
+      line-height:1.08;
+      letter-spacing:-.03em;
+    }
+    .lead{
+      margin:0;
+      color:var(--muted);
+      font-size:1rem;
+      max-width:70ch;
+    }
+    .progress-shell{
+      padding:18px 30px 0;
+    }
+    .progress-meta{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      color:var(--muted);
+      font-size:.9rem;
+      margin-bottom:8px;
+    }
+    .progress{
+      height:9px;
+      background:#eceae5;
+      border-radius:999px;
+      overflow:hidden;
+    }
+    .progress > span{
+      display:block;
+      height:100%;
+      width:0%;
+      background:var(--accent);
+      border-radius:999px;
+      transition:width .25s ease;
+    }
+    form{padding:0}
+    .step{
+      display:none;
+      padding:30px;
+    }
+    .step.active{display:block}
+    .step h2{
+      margin:0 0 8px;
+      font-size:1.55rem;
+      letter-spacing:-.02em;
+    }
+    .step-intro{
+      margin:0 0 28px;
+      color:var(--muted);
+    }
+    .q{
+      padding:0 0 28px;
+      margin:0 0 28px;
+      border-bottom:1px solid var(--line);
+    }
+    .q:last-of-type{border-bottom:none}
+    .q label.question{
+      display:block;
+      font-weight:700;
+      font-size:1.03rem;
+      margin-bottom:8px;
+    }
+    .hint{
+      color:var(--muted);
+      font-size:.92rem;
+      margin:0 0 12px;
+    }
+    input[type="text"],
+    input[type="url"],
+    textarea,
+    select{
+      width:100%;
+      border:1px solid #cfcac1;
+      border-radius:14px;
+      padding:13px 14px;
+      font:inherit;
+      color:var(--text);
+      background:#fff;
+      outline:none;
+      transition:border-color .15s ease, box-shadow .15s ease;
+    }
+    textarea{min-height:130px; resize:vertical}
+    input:focus, textarea:focus, select:focus{
+      border-color:var(--accent);
+      box-shadow:0 0 0 4px rgba(47,93,80,.10);
+    }
+    .options{
+      display:grid;
+      gap:10px;
+      margin-top:10px;
+    }
+    .option{
+      display:flex;
+      align-items:flex-start;
+      gap:10px;
+      padding:11px 12px;
+      border:1px solid var(--line);
+      border-radius:14px;
+      background:#fff;
+    }
+    .option input{margin-top:3px}
+    .scale{
+      display:grid;
+      grid-template-columns:repeat(5,1fr);
+      gap:8px;
+      margin-top:12px;
+    }
+    .scale label{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:6px;
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:10px 6px;
+      cursor:pointer;
+      background:#fff;
+    }
+    .scale small{color:var(--muted);font-size:.76rem;text-align:center}
+    .inline-3{
+      display:grid;
+      grid-template-columns:1fr 1fr 1fr;
+      gap:10px;
+    }
+    .nav{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      padding:20px 30px 30px;
+      border-top:1px solid var(--line);
+      background:#fcfcfa;
+    }
+    button{
+      appearance:none;
+      border:0;
+      border-radius:14px;
+      padding:12px 18px;
+      font:inherit;
+      font-weight:700;
+      cursor:pointer;
+    }
+    .btn-secondary{
+      background:#efede8;
+      color:var(--text);
+    }
+    .btn-primary{
+      background:var(--accent);
+      color:white;
+    }
+    .btn-primary:hover{filter:brightness(.96)}
+    .btn-secondary:hover{background:#e7e4de}
+    .required::after{
+      content:" *";
+      color:var(--danger);
+    }
+    .note{
+      background:var(--accent-soft);
+      border-radius:16px;
+      padding:14px 16px;
+      color:#274d42;
+      margin:0 0 24px;
+    }
+    .thanks{
+      text-align:center;
+      padding:54px 30px 62px;
+    }
+    .thanks h2{font-size:2rem;margin-bottom:10px}
+    .hidden{display:none!important}
+    .trap{display:none!important}
+    @media (max-width:680px){
+      .wrap{width:min(calc(100% - 18px), var(--max)); margin:16px auto}
+      .top,.step,.nav,.progress-shell{padding-left:18px;padding-right:18px}
+      .inline-3{grid-template-columns:1fr}
+      .scale{grid-template-columns:repeat(5, minmax(0,1fr))}
+      .scale small{display:none}
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="card">
+      <header class="top">
+        <div class="eyebrow">Ankieta projektowa</div>
+        <h1>Gabriel i Wiktoria</h1>
+        <p class="lead">
+          Ta ankieta pomoże mi lepiej zrozumieć Wasze preferencje, potrzeby i sposób, w jaki chcecie czuć się w nowym mieszkaniu.
+          Nie ma dobrych ani złych odpowiedzi — zależy mi przede wszystkim na Waszych skojarzeniach, odczuciach i codziennych przyzwyczajeniach.
+        </p>
+      </header>
+
+      <div class="progress-shell">
+        <div class="progress-meta">
+          <span id="stepLabel">Etap 1 z 7</span>
+          <span id="percentLabel">14%</span>
+        </div>
+        <div class="progress"><span id="progressBar"></span></div>
+      </div>
+
+      <form
+        id="designSurvey"
+        name="ankieta-projektowa-gabriel-wiktoria"
+        method="POST"
+        data-netlify="true"
+        netlify-honeypot="bot-field"
+        action="/dziekujemy.html"
+      >
+        <input type="hidden" name="form-name" value="ankieta-projektowa-gabriel-wiktoria" />
+        <p class="trap">
+          <label>Nie wypełniaj tego pola: <input name="bot-field" /></label>
+        </p>
+
+        <section class="step active" data-step="1">
+          <h2>1. Wasze mieszkanie</h2>
+          <p class="step-intro">Na początek chcę uchwycić ogólny charakter wnętrza — bez nazw stylów i bez szukania „poprawnych” odpowiedzi.</p>
+
+          <div class="q">
+            <label class="question required" for="q1">Wyobraźcie sobie pierwszy poranek w całkowicie ukończonym mieszkaniu. Co widzicie?</label>
+            <p class="hint">Opiszcie kolory, materiały, światło, faktury, meble, przedmioty i atmosferę.</p>
+            <textarea id="q1" name="01_pierwszy_porannek" required></textarea>
+          </div>
+
+          <div class="q">
+            <label class="question required">Jak przede wszystkim chcecie się czuć w swoim mieszkaniu?</label>
+            <p class="hint">Wybierzcie maksymalnie 5 odpowiedzi.</p>
+            <div class="options" data-max="5">
+              <label class="option"><input type="checkbox" name="02_odczucia[]" value="spokojnie"> spokojnie</label>
+              <label class="option"><input type="checkbox" name="02_odczucia[]" value="bezpiecznie"> bezpiecznie</label>
+              <label class="option"><input type="checkbox" name="02_odczucia[]" value="swobodnie"> swobodnie</label>
+              <label class="option"><input type="checkbox" name="02_odczucia[]" value="komfortowo"> komfortowo</label>
+              <label class="option"><input type="checkbox" name="02_odczucia[]" value="przytulnie"> przytulnie</label>
+              <label class="option"><input type="checkbox" name="02_odczucia[]" value="elegancko"> elegancko</label>
+              <label class="option"><input type="checkbox" name="02_odczucia[]" value="luksusowo"> luksusowo</label>
+              <label class="option"><input type="checkbox" name="02_odczucia[]" value="lekko"> lekko</label>
+              <label class="option"><input type="checkbox" name="02_odczucia[]" value="energetycznie"> energetycznie</label>
+              <label class="option"><input type="checkbox" name="02_odczucia[]" value="harmonijnie"> harmonijnie</label>
+              <label class="option"><input type="checkbox" name="02_odczucia[]" value="intymnie"> intymnie</label>
+              <label class="option"><input type="checkbox" name="02_odczucia[]" value="reprezentacyjnie"> reprezentacyjnie</label>
+            </div>
+            <input type="text" name="02_odczucia_inne" placeholder="Inne odczucie..." style="margin-top:10px">
+          </div>
+
+          <div class="q">
+            <label class="question required" for="q3">Jakie trzy słowa najlepiej powinny opisywać Wasze przyszłe mieszkanie?</label>
+            <input id="q3" type="text" name="03_trzy_slowa" required />
+          </div>
+
+          <div class="q">
+            <label class="question required" for="q4">Jakie trzy określenia absolutnie NIE powinny do niego pasować?</label>
+            <input id="q4" type="text" name="04_trzy_nie" required />
+          </div>
+
+          <div class="q">
+            <label class="question required">Czy mieszkanie powinno być bardziej spokojnym tłem czy wnętrzem o mocnym charakterze?</label>
+            <div class="scale">
+              <label><input type="radio" name="05_charakter" value="1" required><strong>1</strong><small>spokojne tło</small></label>
+              <label><input type="radio" name="05_charakter" value="2"><strong>2</strong></label>
+              <label><input type="radio" name="05_charakter" value="3"><strong>3</strong></label>
+              <label><input type="radio" name="05_charakter" value="4"><strong>4</strong></label>
+              <label><input type="radio" name="05_charakter" value="5"><strong>5</strong><small>mocny charakter</small></label>
+            </div>
+          </div>
+        </section>
+
+        <section class="step" data-step="2">
+          <h2>2. Materiały, kolor i zmysły</h2>
+          <p class="step-intro">Ta część pomoże określić kierunek materiałowy i atmosferę wnętrza.</p>
+
+          <div class="q">
+            <label class="question required" for="q6">Wyobraźcie sobie, że opisujecie swoje przyszłe mieszkanie osobie niewidomej.</label>
+            <p class="hint">Jakie jest w dotyku, temperaturze, dźwięku i atmosferze? Miękkie czy surowe? Ciepłe czy chłodne? Gładkie czy pełne struktur?</p>
+            <textarea id="q6" name="06_opis_dla_niewidomej_osoby" required></textarea>
+          </div>
+
+          <div class="q">
+            <label class="question">Jakie materiały szczególnie lubicie mieć wokół siebie?</label>
+            <div class="options">
+              <label class="option"><input type="checkbox" name="07_materialy[]" value="naturalne drewno"> naturalne drewno</label>
+              <label class="option"><input type="checkbox" name="07_materialy[]" value="kamień"> kamień</label>
+              <label class="option"><input type="checkbox" name="07_materialy[]" value="szkło"> szkło</label>
+              <label class="option"><input type="checkbox" name="07_materialy[]" value="metal"> metal</label>
+              <label class="option"><input type="checkbox" name="07_materialy[]" value="tkaniny"> tkaniny</label>
+              <label class="option"><input type="checkbox" name="07_materialy[]" value="skóra"> skóra</label>
+              <label class="option"><input type="checkbox" name="07_materialy[]" value="ceramika"> ceramika</label>
+              <label class="option"><input type="checkbox" name="07_materialy[]" value="beton lub mikrocement"> beton / mikrocement</label>
+              <label class="option"><input type="checkbox" name="07_materialy[]" value="tynki strukturalne"> tynki strukturalne</label>
+              <label class="option"><input type="checkbox" name="07_materialy[]" value="gładkie jednolite powierzchnie"> gładkie, jednolite powierzchnie</label>
+              <label class="option"><input type="checkbox" name="07_materialy[]" value="naturalne niedoskonałości i struktury"> naturalne struktury i niedoskonałości</label>
+            </div>
+            <input type="text" name="07_materialy_inne" placeholder="Inne..." style="margin-top:10px">
+          </div>
+
+          <div class="q">
+            <label class="question" for="q8">Czy są materiały, powierzchnie albo wykończenia, których zdecydowanie nie chcecie?</label>
+            <textarea id="q8" name="08_materialy_nie"></textarea>
+          </div>
+
+          <div class="q">
+            <label class="question required">Jak chcielibyście używać koloru we wnętrzu?</label>
+            <div class="options">
+              <label class="option"><input type="radio" name="09_kolor" value="neutralne spokojne tło" required> neutralne, spokojne tło</label>
+              <label class="option"><input type="radio" name="09_kolor" value="neutralna baza i akcenty"> neutralna baza + pojedyncze akcenty</label>
+              <label class="option"><input type="radio" name="09_kolor" value="kilka wyrazniejszych kolorow"> kilka wyraźniejszych kolorów</label>
+              <label class="option"><input type="radio" name="09_kolor" value="kolor jako glowny element"> kolor jako jeden z głównych elementów projektu</label>
+              <label class="option"><input type="radio" name="09_kolor" value="wolimy zobaczyc propozycje"> trudno powiedzieć — wolimy zobaczyć propozycje</label>
+            </div>
+          </div>
+
+          <div class="q">
+            <label class="question" for="q10">Jakich kolorów lub zestawień kolorystycznych zdecydowanie nie chcecie?</label>
+            <input id="q10" type="text" name="10_kolory_nie" />
+          </div>
+        </section>
+
+        <section class="step" data-step="3">
+          <h2>3. Jak żyjecie</h2>
+          <p class="step-intro">Interesuje mnie nie idealny obraz domu, tylko Wasza codzienność i realne przyzwyczajenia.</p>
+
+          <div class="q">
+            <label class="question required" for="q11">Jak wygląda Wasz typowy wieczór w domu?</label>
+            <p class="hint">Co robicie po powrocie, gdzie spędzacie czas, czy jecie razem, oglądacie coś, pracujecie, czy każde zajmuje się czymś swoim?</p>
+            <textarea id="q11" name="11_typowy_wieczor" required></textarea>
+          </div>
+
+          <div class="q">
+            <label class="question" for="q12">Jak wygląda Wasz idealny wolny dzień spędzony w mieszkaniu?</label>
+            <textarea id="q12" name="12_idealny_wolny_dzien"></textarea>
+          </div>
+
+          <div class="q">
+            <label class="question" for="q13">Co najczęściej robicie w domu razem, a co każde z Was lubi robić osobno?</label>
+            <textarea id="q13" name="13_razem_i_osobno"></textarea>
+          </div>
+
+          <div class="q">
+            <label class="question required" for="q14">Co najbardziej irytowało Was w obecnym lub poprzednich mieszkaniach?</label>
+            <p class="hint">Mogą to być nawet bardzo drobne rzeczy: brak miejsca na odkładanie, złe światło, bałagan, niewygodne przejścia, brak prywatności itp.</p>
+            <textarea id="q14" name="14_frustracje" required></textarea>
+          </div>
+
+          <div class="q">
+            <label class="question">Co najczęściej zostaje u Was „na wierzchu”?</label>
+            <div class="options">
+              <label class="option"><input type="checkbox" name="15_na_wierzchu[]" value="klucze"> klucze</label>
+              <label class="option"><input type="checkbox" name="15_na_wierzchu[]" value="torby"> torby</label>
+              <label class="option"><input type="checkbox" name="15_na_wierzchu[]" value="ubrania"> ubrania</label>
+              <label class="option"><input type="checkbox" name="15_na_wierzchu[]" value="ladowarki"> ładowarki</label>
+              <label class="option"><input type="checkbox" name="15_na_wierzchu[]" value="dokumenty"> dokumenty</label>
+              <label class="option"><input type="checkbox" name="15_na_wierzchu[]" value="kosmetyki"> kosmetyki</label>
+              <label class="option"><input type="checkbox" name="15_na_wierzchu[]" value="ksiazki"> książki</label>
+              <label class="option"><input type="checkbox" name="15_na_wierzchu[]" value="kubki"> kubki</label>
+              <label class="option"><input type="checkbox" name="15_na_wierzchu[]" value="sprzet sportowy"> sprzęt sportowy</label>
+            </div>
+            <input type="text" name="15_na_wierzchu_inne" placeholder="Inne..." style="margin-top:10px">
+          </div>
+
+          <div class="q">
+            <label class="question required">Generalnie wolicie, żeby przedmioty codziennego użytku były…</label>
+            <div class="options">
+              <label class="option"><input type="radio" name="16_przedmioty" value="niemal wszystkie schowane" required> niemal wszystkie schowane</label>
+              <label class="option"><input type="radio" name="16_przedmioty" value="glownie schowane"> głównie schowane, ale część może zostać widoczna</label>
+              <label class="option"><input type="radio" name="16_przedmioty" value="czesc wnętrza"> lubimy, kiedy przedmioty są częścią wnętrza</label>
+              <label class="option"><input type="radio" name="16_przedmioty" value="zalezy od pomieszczenia"> zależy od pomieszczenia</label>
+            </div>
+          </div>
+
+          <div class="q">
+            <label class="question" for="q17">Czy macie rzeczy, które powinny zostać wyeksponowane albo znaleźć swoje szczególne miejsce?</label>
+            <p class="hint">Np. sztuka, fotografie, książki, pamiątki, kolekcje, instrumenty.</p>
+            <textarea id="q17" name="17_do_ekspozycji"></textarea>
+          </div>
+        </section>
+
+        <section class="step" data-step="4">
+          <h2>4. Światło i inspiracje</h2>
+          <p class="step-intro">Tu chcę zrozumieć, jaki rodzaj atmosfery i odniesień wizualnych jest Wam najbliższy.</p>
+
+          <div class="q">
+            <label class="question required">Jak powinno wyglądać mieszkanie wieczorem?</label>
+            <div class="options">
+              <label class="option"><input type="radio" name="18_swiatlo_wieczorem" value="jasne rownomierne" required> dużo jasnego, równomiernego światła</label>
+              <label class="option"><input type="radio" name="18_swiatlo_wieczorem" value="glowne z regulacja"> główne światło z możliwością regulacji</label>
+              <label class="option"><input type="radio" name="18_swiatlo_wieczorem" value="kilka mniejszych zrodel"> kilka mniejszych źródeł światła zamiast jednego głównego</label>
+              <label class="option"><input type="radio" name="18_swiatlo_wieczorem" value="kameralne nastrojowe"> kameralne, nastrojowe światło</label>
+              <label class="option"><input type="radio" name="18_swiatlo_wieczorem" value="zalezy od pomieszczenia"> zależy od pomieszczenia</label>
+            </div>
+          </div>
+
+          <div class="q">
+            <label class="question">Przy jakich czynnościach szczególnie zależy Wam na dobrym świetle?</label>
+            <div class="options">
+              <label class="option"><input type="checkbox" name="19_dobre_swiatlo[]" value="gotowanie"> gotowanie</label>
+              <label class="option"><input type="checkbox" name="19_dobre_swiatlo[]" value="jedzenie przy stole"> jedzenie przy stole</label>
+              <label class="option"><input type="checkbox" name="19_dobre_swiatlo[]" value="czytanie"> czytanie</label>
+              <label class="option"><input type="checkbox" name="19_dobre_swiatlo[]" value="praca"> praca</label>
+              <label class="option"><input type="checkbox" name="19_dobre_swiatlo[]" value="makijaz i pielegnacja"> makijaż / pielęgnacja</label>
+              <label class="option"><input type="checkbox" name="19_dobre_swiatlo[]" value="ubieranie sie"> ubieranie się</label>
+              <label class="option"><input type="checkbox" name="19_dobre_swiatlo[]" value="oglądanie filmow"> oglądanie filmów</label>
+              <label class="option"><input type="checkbox" name="19_dobre_swiatlo[]" value="goscie"> przyjmowanie gości</label>
+              <label class="option"><input type="checkbox" name="19_dobre_swiatlo[]" value="odpoczynek"> odpoczynek</label>
+            </div>
+          </div>
+
+          <div class="q">
+            <label class="question" for="q20">Pomyślcie o wnętrzu, hotelu, restauracji albo innym miejscu, w którym czuliście się wyjątkowo dobrze. Co konkretnie Wam odpowiadało?</label>
+            <textarea id="q20" name="20_miejsce_inspiracja"></textarea>
+          </div>
+
+          <div class="q">
+            <label class="question" for="q21">Czy jest wnętrze, które uważacie za piękne, ale sami nie chcielibyście w nim mieszkać? Dlaczego?</label>
+            <textarea id="q21" name="21_ladne_ale_nie_dla_nas"></textarea>
+          </div>
+
+          <div class="q">
+            <label class="question" for="q22">Jeśli macie linki do inspiracji, możecie dodać je tutaj.</label>
+            <p class="hint">Może to być Pinterest, Instagram, strona hotelu, restauracji albo konkretnego produktu.</p>
+            <textarea id="q22" name="22_linki_do_inspiracji" placeholder="Wklejcie linki, każdy w osobnej linii."></textarea>
+          </div>
+        </section>
+
+        <section class="step" data-step="5">
+          <h2>5. Gabriel</h2>
+          <p class="step-intro">Ta część służy poznaniu indywidualnych preferencji. Najlepiej odpowiedzieć spontanicznie, wyłącznie z własnej perspektywy.</p>
+          <div class="note">Gabriel — odpowiedz na tę część samodzielnie.</div>
+
+          <div class="q">
+            <label class="question required" for="g1">Kiedy wracasz do domu po wymagającym dniu, czego najbardziej potrzebujesz od przestrzeni wokół siebie?</label>
+            <textarea id="g1" name="23_gabriel_powrot_do_domu" required></textarea>
+          </div>
+
+          <div class="q">
+            <label class="question required" for="g2">Gdybyś przez chwilę miał myśleć wyłącznie o własnych preferencjach, jak wyglądałoby Twoje idealne wnętrze?</label>
+            <p class="hint">Możesz opisać klimat, materiały, kolory, światło albo konkretne elementy.</p>
+            <textarea id="g2" name="24_gabriel_idealne_wnetrze" required></textarea>
+          </div>
+
+          <div class="q">
+            <label class="question">Które elementy najbardziej wpływają na Twój komfort w domu?</label>
+            <p class="hint">Wybierz maksymalnie 3.</p>
+            <div class="options" data-max="3">
+              <label class="option"><input type="checkbox" name="25_gabriel_komfort[]" value="porzadek"> porządek i brak rzeczy na widoku</label>
+              <label class="option"><input type="checkbox" name="25_gabriel_komfort[]" value="wygodne meble"> wygodne meble</label>
+              <label class="option"><input type="checkbox" name="25_gabriel_komfort[]" value="cisza"> cisza</label>
+              <label class="option"><input type="checkbox" name="25_gabriel_komfort[]" value="dobre swiatlo"> dobre światło</label>
+              <label class="option"><input type="checkbox" name="25_gabriel_komfort[]" value="duzo swiatla dziennego"> dużo światła dziennego</label>
+              <label class="option"><input type="checkbox" name="25_gabriel_komfort[]" value="prywatnosc"> prywatność</label>
+              <label class="option"><input type="checkbox" name="25_gabriel_komfort[]" value="poczucie przestrzeni"> poczucie przestrzeni</label>
+              <label class="option"><input type="checkbox" name="25_gabriel_komfort[]" value="temperatura"> odpowiednia temperatura</label>
+              <label class="option"><input type="checkbox" name="25_gabriel_komfort[]" value="odciecie od bodzcow"> możliwość odcięcia się od bodźców</label>
+              <label class="option"><input type="checkbox" name="25_gabriel_komfort[]" value="jakosc materialow"> wysokiej jakości materiały</label>
+              <label class="option"><input type="checkbox" name="25_gabriel_komfort[]" value="technologia"> technologia i wygodne rozwiązania</label>
+              <label class="option"><input type="checkbox" name="25_gabriel_komfort[]" value="goscie"> możliwość swobodnego przyjmowania gości</label>
+            </div>
+          </div>
+
+          <div class="q">
+            <label class="question required" for="g4">Jaki jeden element lub aspekt mieszkania jest dla Ciebie szczególnie ważny?</label>
+            <textarea id="g4" name="26_gabriel_bez_kompromisu" required></textarea>
+          </div>
+
+          <div class="q">
+            <label class="question" for="g5">W jakich kwestiach projektowych jesteś najbardziej elastyczny?</label>
+            <textarea id="g5" name="27_gabriel_elastyczny"></textarea>
+          </div>
+
+          <div class="q">
+            <label class="question" for="g6">Czy jest coś, co często pojawia się we współczesnych wnętrzach, a Ty zdecydowanie nie chciałbyś mieć tego u siebie?</label>
+            <textarea id="g6" name="28_gabriel_nie_chce"></textarea>
+          </div>
+        </section>
+
+        <section class="step" data-step="6">
+          <h2>6. Wiktoria</h2>
+          <p class="step-intro">Teraz analogicznie — chodzi wyłącznie o Twoją własną perspektywę.</p>
+          <div class="note">Wiktoria — odpowiedz na tę część samodzielnie.</div>
+
+          <div class="q">
+            <label class="question required" for="w1">Kiedy wracasz do domu po wymagającym dniu, czego najbardziej potrzebujesz od przestrzeni wokół siebie?</label>
+            <textarea id="w1" name="29_wiktoria_powrot_do_domu" required></textarea>
+          </div>
+
+          <div class="q">
+            <label class="question required" for="w2">Gdybyś przez chwilę miała myśleć wyłącznie o własnych preferencjach, jak wyglądałoby Twoje idealne wnętrze?</label>
+            <p class="hint">Możesz opisać klimat, materiały, kolory, światło albo konkretne elementy.</p>
+            <textarea id="w2" name="30_wiktoria_idealne_wnetrze" required></textarea>
+          </div>
+
+          <div class="q">
+            <label class="question">Które elementy najbardziej wpływają na Twój komfort w domu?</label>
+            <p class="hint">Wybierz maksymalnie 3.</p>
+            <div class="options" data-max="3">
+              <label class="option"><input type="checkbox" name="31_wiktoria_komfort[]" value="porzadek"> porządek i brak rzeczy na widoku</label>
+              <label class="option"><input type="checkbox" name="31_wiktoria_komfort[]" value="wygodne meble"> wygodne meble</label>
+              <label class="option"><input type="checkbox" name="31_wiktoria_komfort[]" value="cisza"> cisza</label>
+              <label class="option"><input type="checkbox" name="31_wiktoria_komfort[]" value="dobre swiatlo"> dobre światło</label>
+              <label class="option"><input type="checkbox" name="31_wiktoria_komfort[]" value="duzo swiatla dziennego"> dużo światła dziennego</label>
+              <label class="option"><input type="checkbox" name="31_wiktoria_komfort[]" value="prywatnosc"> prywatność</label>
+              <label class="option"><input type="checkbox" name="31_wiktoria_komfort[]" value="poczucie przestrzeni"> poczucie przestrzeni</label>
+              <label class="option"><input type="checkbox" name="31_wiktoria_komfort[]" value="temperatura"> odpowiednia temperatura</label>
+              <label class="option"><input type="checkbox" name="31_wiktoria_komfort[]" value="odciecie od bodzcow"> możliwość odcięcia się od bodźców</label>
+              <label class="option"><input type="checkbox" name="31_wiktoria_komfort[]" value="jakosc materialow"> wysokiej jakości materiały</label>
+              <label class="option"><input type="checkbox" name="31_wiktoria_komfort[]" value="technologia"> technologia i wygodne rozwiązania</label>
+              <label class="option"><input type="checkbox" name="31_wiktoria_komfort[]" value="goscie"> możliwość swobodnego przyjmowania gości</label>
+            </div>
+          </div>
+
+          <div class="q">
+            <label class="question required" for="w4">Jaki jeden element lub aspekt mieszkania jest dla Ciebie szczególnie ważny?</label>
+            <textarea id="w4" name="32_wiktoria_bez_kompromisu" required></textarea>
+          </div>
+
+          <div class="q">
+            <label class="question" for="w5">W jakich kwestiach projektowych jesteś najbardziej elastyczna?</label>
+            <textarea id="w5" name="33_wiktoria_elastyczna"></textarea>
+          </div>
+
+          <div class="q">
+            <label class="question" for="w6">Czy jest coś, co często pojawia się we współczesnych wnętrzach, a Ty zdecydowanie nie chciałabyś mieć tego u siebie?</label>
+            <textarea id="w6" name="34_wiktoria_nie_chce"></textarea>
+          </div>
+        </section>
+
+        <section class="step" data-step="7">
+          <h2>7. Priorytety</h2>
+          <p class="step-intro">Na koniec kilka pytań, które pomogą mi ustalić hierarchię decyzji projektowych.</p>
+
+          <div class="q">
+            <label class="question required">Gdybyście mogli szczególnie dopracować tylko trzy rzeczy w całym mieszkaniu, co byście wybrali?</label>
+            <div class="inline-3">
+              <input type="text" name="35_priorytet_1" placeholder="1." required>
+              <input type="text" name="35_priorytet_2" placeholder="2." required>
+              <input type="text" name="35_priorytet_3" placeholder="3." required>
+            </div>
+          </div>
+
+          <div class="q">
+            <label class="question">Gdzie Waszym zdaniem warto zainwestować więcej, jeśli przełoży się to na jakość mieszkania?</label>
+            <div class="options">
+              <label class="option"><input type="checkbox" name="36_warto_inwestowac[]" value="materialy"> materiały wykończeniowe</label>
+              <label class="option"><input type="checkbox" name="36_warto_inwestowac[]" value="stolarka"> zabudowy stolarskie</label>
+              <label class="option"><input type="checkbox" name="36_warto_inwestowac[]" value="meble"> meble</label>
+              <label class="option"><input type="checkbox" name="36_warto_inwestowac[]" value="kuchnia"> kuchnia</label>
+              <label class="option"><input type="checkbox" name="36_warto_inwestowac[]" value="lazienki"> łazienki</label>
+              <label class="option"><input type="checkbox" name="36_warto_inwestowac[]" value="oswietlenie"> oświetlenie</label>
+              <label class="option"><input type="checkbox" name="36_warto_inwestowac[]" value="agd i technologia"> AGD / technologia</label>
+              <label class="option"><input type="checkbox" name="36_warto_inwestowac[]" value="sztuka i dodatki"> sztuka i dodatki</label>
+              <label class="option"><input type="checkbox" name="36_warto_inwestowac[]" value="komfort"> komfort — materac, sofa, fotele</label>
+              <label class="option"><input type="checkbox" name="36_warto_inwestowac[]" value="rekomendacja projektanta"> trudno powiedzieć — chcemy rekomendacji</label>
+            </div>
+          </div>
+
+          <div class="q">
+            <label class="question" for="q37">Gdzie najłatwiej zaakceptowalibyście kompromis?</label>
+            <textarea id="q37" name="37_kompromis"></textarea>
+          </div>
+
+          <div class="q">
+            <label class="question required" for="q38">Wyobraźcie sobie, że od kilku miesięcy mieszkacie już w ukończonym wnętrzu i mówicie: „To mieszkanie naprawdę jest nasze”. Co musiałoby być w nim takiego, żebyście oboje mogli tak powiedzieć?</label>
+            <textarea id="q38" name="38_definicja_sukcesu" required></textarea>
+          </div>
+
+          <div class="q">
+            <label class="question" for="q39">Czy jest coś ważnego, o co nie zapytałam, a co powinnam wiedzieć przed rozpoczęciem projektowania?</label>
+            <textarea id="q39" name="39_dodatkowe_info"></textarea>
+          </div>
+        </section>
+
+        <div class="nav">
+          <button type="button" class="btn-secondary" id="prevBtn">Wstecz</button>
+          <button type="button" class="btn-primary" id="nextBtn">Dalej</button>
+          <button type="submit" class="btn-primary hidden" id="submitBtn">Wyślij ankietę</button>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <script>
+    const form = document.getElementById('designSurvey');
+    const steps = [...document.querySelectorAll('.step')];
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const submitBtn = document.getElementById('submitBtn');
+    const stepLabel = document.getElementById('stepLabel');
+    const percentLabel = document.getElementById('percentLabel');
+    const progressBar = document.getElementById('progressBar');
+    let currentStep = 0;
+
+    function showStep(index){
+      steps.forEach((step,i)=>step.classList.toggle('active', i===index));
+      currentStep = index;
+      const percent = Math.round(((index+1)/steps.length)*100);
+      stepLabel.textContent = `Etap ${index+1} z ${steps.length}`;
+      percentLabel.textContent = `${percent}%`;
+      progressBar.style.width = `${percent}%`;
+      prevBtn.style.visibility = index===0 ? 'hidden' : 'visible';
+      nextBtn.classList.toggle('hidden', index===steps.length-1);
+      submitBtn.classList.toggle('hidden', index!==steps.length-1);
+      window.scrollTo({top:0,behavior:'smooth'});
+    }
+
+    function validateCurrentStep(){
+      const required = [...steps[currentStep].querySelectorAll('[required]')];
+      for(const field of required){
+        if(field.type === 'radio'){
+          const group = steps[currentStep].querySelectorAll(`input[type="radio"][name="${CSS.escape(field.name)}"]`);
+          if(![...group].some(r=>r.checked)){
+            field.reportValidity();
+            return false;
+          }
+        } else if(!field.checkValidity()){
+          field.reportValidity();
+          return false;
+        }
+      }
+      return true;
+    }
+
+    nextBtn.addEventListener('click', ()=>{
+      if(validateCurrentStep() && currentStep < steps.length-1){
+        showStep(currentStep+1);
+      }
+    });
+
+    prevBtn.addEventListener('click', ()=>{
+      if(currentStep>0) showStep(currentStep-1);
+    });
+
+    document.querySelectorAll('.options[data-max]').forEach(group=>{
+      const max = Number(group.dataset.max);
+      const checks = [...group.querySelectorAll('input[type="checkbox"]')];
+      checks.forEach(ch=>{
+        ch.addEventListener('change', ()=>{
+          const checked = checks.filter(c=>c.checked);
+          if(checked.length >= max){
+            checks.filter(c=>!c.checked).forEach(c=>c.disabled = true);
+          } else {
+            checks.forEach(c=>c.disabled = false);
+          }
+        });
+      });
+    });
+
+    form.addEventListener('submit', (e)=>{
+      if(!validateCurrentStep()){
+        e.preventDefault();
+      }
+    });
+
+    showStep(0);
+  </script>
+</body>
+</html>
